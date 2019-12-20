@@ -44,7 +44,7 @@
         <tr class="text-center">
             <td> <?php echo $res['PID'];  ?> </td>
             <td> <?php echo $res['name'];  ?> </td>
-            <td> <?php echo $res['image'];  ?> </td>
+            <td> <img src="<?php echo $res['image']; ?>"></td>
             <td> <?php echo $res['price'];  ?> </td>
             <td> <?php echo $res['cname'];  ?> </td>
             <td> <button class="btn-danger btn"> <a href="deleteProduct.php?pid=<?php echo $res['PID']; ?>" class="text-white"> Delete </a>  </button> </td>

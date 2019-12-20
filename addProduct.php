@@ -9,16 +9,27 @@ if(isset($_POST['addProduct'])){
 
   $name = $_POST['name'];
   $price = $_POST['price'];
-  $im = $_FILES['uploadImage'];
   $cname = $_POST['cname'];
   
-  if($im!='') {
-    $upload_directory = "MyUploadImages/";
-    $TargetPath=time().$im;
-    if(move_uploaded_file($_FILES['files']['tmp_name'], $upload_directory.$TargetPath)){    
-      $image="$TargetPath";                 
-    }
+// Image
+  $im = $_FILES['file']['name'];
+  $target_dir = "MyUploadImages/";
+  $target_file = $target_dir . basename($_FILES["file"]["name"]);
+
+  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+  $extensions_arr = array("jpg","png");
+
+  if(in_array($imageFileType,$extensions_arr) ){ 
+    $image = ".$im.";
+    move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$im);
+  } elseif(empty($im)) {
+    
+  } else {
+    $imageErr = "* Only .jpg and .png formats are allowed";
   }
+
+
 
 // Validations
 
@@ -78,7 +89,7 @@ if(isset($_POST['addProduct'])){
       <span class="invalid"><?php echo $priceErr ?></span><br>
 
       <label> Upload Iamge </label>
-      <input type="file" name="uploadImage" class="form-control"> 
+      <input type="file" name="file" class="form-control"> 
       <span class="invalid"><?php echo $imageErr ?></span><br>
 
       <label> Select Category </label>

@@ -1,0 +1,21 @@
+body {
+	width: 100%;
+}
+
+img {
+  	max-width: 100%;
+  	height: auto;
+}
+
+#submit {
+	margin: 1% 35% 7%;
+	padding: 2% 8%;
+	font-weight: bold;
+}
+#php {
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+#ip {
+	margin-left: 2%;
+}

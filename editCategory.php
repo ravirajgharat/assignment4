@@ -21,7 +21,9 @@
     }
 
 ?>
-
+<?php  
+    include 'MyUploadImages/top.html';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +31,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="invalid.css">
+    <link rel="stylesheet" type="text/css" href="re.css">
+    <link rel="stylesheet" type="text/css" href="MyUploadImages/top.css">
+    <link rel="stylesheet" type="text/css" href="MyUploadImages/bottom.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -36,26 +41,36 @@
 </head>
 <body>
 
-<div class="col-lg-6 m-auto">
+<div class="container-fluid">
+    <div class="row" id="r2bi">
+        <h1 class="m-auto" id="r2h1">Edit Category</h1>
+    </div>
+</div>
+
+<div class="container border" id="php">
  
     <form method="post">
      
         <br><br>
-        <div class="card border border-0">
-         
-            <div class="card-header bg-dark">
-                <h1 class="text-white text-center">  Edit Category </h1>
-            </div><br>
+        <div class="row" id="ip">
+            <div class="col-sm-6">
+                <label> Updated Category Name: </label>
+                <input type="text" name="cname" class="form-control">
+                <span class="invalid"><?php echo $cnameErr ?></span>
+                <br>
+            </div>  
+        </div>
+        <hr>
 
-            <label> Updated Category Name: </label>
-            <input type="text" name="cname" class="form-control">
-            <span class="invalid"><?php echo $cnameErr ?></span>
-            <br>
-
-            <button class="btn btn-success" type="submit" name="editCategory"> Update Category </button><br>
-
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-success" id="submit" type="submit" name="editCategory">Submit</button><br>
+            </div>
         </div>
     </form>
  </div>
 </body>
 </html>
+<?php  
+    include 'MyUploadImages/bottom.html';
+?>

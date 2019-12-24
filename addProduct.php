@@ -9,26 +9,30 @@ if(isset($_POST['addProduct'])){
 
   $name = $_POST['name'];
   $price = $_POST['price'];
+  $image = $_FILES['file'];
   $cname = $_POST['cname'];
   
 // Image
-  $im = $_FILES['file']['name'];
-  $target_dir = "MyUploadImages/";
-  $target_file = $target_dir . basename($_FILES["file"]["name"]);
+  $fileName = $image['name'];
+  $fileError = $image['error'];
+  $fileTmp = $image['tmp_name'];
 
-  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  $fileExt = explode('.', $fileName);
+  $fileCheck = strtolower(end($fileExt));
+  $fileExtStored = array('png','jpg');
 
-  $extensions_arr = array("jpg","png");
-
-  if(in_array($imageFileType,$extensions_arr) ){ 
-    $image = ".$im.";
-    move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$im);
-  } elseif(empty($im)) {
+  if (in_array($fileCheck, $fileExtStored)) {
     
+    $destinationFile = 'uploads/' . $fileName;
+    move_uploaded_file($fileTmp, $destinationFile);
+    $imageErr = "";
   } else {
-    $imageErr = "* Only .jpg and .png formats are allowed";
+    $imageErr = "* Only JPG and PNG images are allowed";
   }
 
+  if($fileName == "") {
+    $imageErr = "";
+  }
 
 
 // Validations
@@ -47,54 +51,73 @@ if(isset($_POST['addProduct'])){
 
   if($nameErr == "" && $priceErr == "" && $imageErr == "" && $cnameErr == "") {
 
-    $q = "INSERT INTO `products`(`name`, `price`, `image`, `cname`) VALUES ('$name', '$price', '$image', '$cname')";
+    $q = "INSERT INTO `products`(`name`, `price`, `image`, `cname`) VALUES ('$name', '$price', '$destinationFile', '$cname')";
     $query = mysqli_query($con,$q);
     header('location:listProduct.php');
 
   }
 }
 ?>
-
+<?php  
+  include 'MyUploadImages/top.html';
+?>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Add Product</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="invalid.css">
+  <link rel="stylesheet" type="text/css" href="re.css">
+  <link rel="stylesheet" type="text/css" href="MyUploadImages/top.css">
+  <link rel="stylesheet" type="text/css" href="MyUploadImages/bottom.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </head>
 <body>
 
-<div class="col-lg-6 m-auto">
+<div class="container-fluid">
+  <div class="row" id="r2bi">
+    <h1 class="m-auto" id="r2h1">Create Product</h1>
+  </div>
+</div>
+
+<div class="container border" id="php">
  
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
    
     <br><br>
-    <div class="card border border-0">
-   
-      <div class="card-header bg-dark">
-        <h1 class="text-white text-center">  Add Product </h1>
-      </div><br>
+    <div class="row" id="ip">
+      <div class="col-sm-6">
+        <label> Product Name </label>
+        <input type="text" name="name" class="form-control"> 
+        <span class="invalid"><?php echo $nameErr ?></span><br>
+      </div>
+    </div>
 
-      <label> Product Name </label>
-      <input type="text" name="name" class="form-control"> 
-      <span class="invalid"><?php echo $nameErr ?></span><br>
+    <div class="row" id="ip">
+      <div class="col-sm-6">   
+        <label> Product Price </label>
+        <input type="text" name="price" class="form-control"> 
+        <span class="invalid"><?php echo $priceErr ?></span><br>
+      </div>
+    </div>
 
-      <label> Product Price </label>
-      <input type="text" name="price" class="form-control"> 
-      <span class="invalid"><?php echo $priceErr ?></span><br>
+    <div class="row" id="ip">
+      <div class="col-sm-6">
+        <label> Upload Iamge </label>
+        <input type="file" name="file" class="form-control"> 
+        <span class="invalid"><?php echo $imageErr; ?></span><br>
+      </div>
+    </div>
 
-      <label> Upload Iamge </label>
-      <input type="file" name="file" class="form-control"> 
-      <span class="invalid"><?php echo $imageErr ?></span><br>
-
-      <label> Select Category </label>
-      <select name="cname" class="form-control">
-<?php
+    <div class="row" id="ip">
+      <div class="col-sm-6">
+        <label> Select Category </label>
+        <select name="cname" class="form-control">
+  <?php
 
     include 'conn.php'; 
     $q = "select * from Categories";
@@ -108,12 +131,21 @@ if(isset($_POST['addProduct'])){
 }
 ?>
       </select>
-      <span class="invalid"><?php echo $cnameErr ?></span><br><br>
-
-      <button class="btn btn-success" type="submit" name="addProduct"> Add Product </button>
-
+        <span class="invalid"><?php echo $cnameErr ?></span><br><br>
+      </div>
     </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <button class="btn btn-success" id="submit" type="submit" name="addProduct">Submit</button>
+      </div>
+    </div>
+
   </form>
 </div>
 </body>
 </html>
+<?php  
+  include 'MyUploadImages/bottom.html';
+?>
